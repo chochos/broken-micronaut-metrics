@@ -1,0 +1,38 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "4.0.2"
+}
+
+apply plugin:"application"
+apply plugin:'java'
+apply plugin:'idea'
+version='1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+//Change to 1.1.3 to verify that it works
+ext.mn='1.1.4'
+
+dependencies {
+    annotationProcessor "io.micronaut:micronaut-inject-java:${mn}"
+    annotationProcessor "io.micronaut:micronaut-validation:${mn}"
+    compile "io.micrometer:micrometer-core:1.1.5",
+        "javax.activation:activation:1.1.1",
+        "io.micronaut:micronaut-inject:${mn}",
+        "io.micronaut:micronaut-validation:${mn}",
+        "io.micronaut:micronaut-http-server-netty:${mn}",
+        "io.micronaut.configuration:micronaut-micrometer-registry-statsd:1.1.0",
+        "io.micronaut:micronaut-runtime:${mn}"
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java:${mn}"
+    testCompile "io.micronaut.test:micronaut-test-junit5:1.0.5"
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+
+mainClassName = "com.example.Application"
